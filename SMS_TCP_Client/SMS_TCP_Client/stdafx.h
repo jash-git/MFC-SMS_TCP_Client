@@ -33,6 +33,8 @@
 
 #include <afxcontrolbars.h>     // 功能區和控制列的 MFC 支援
 
+#include <afxsock.h>		// MFC socket extensions //Socket Step00
+
 
 
 

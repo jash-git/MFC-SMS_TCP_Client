@@ -51,6 +51,7 @@ BOOL CSMS_TCP_ClientDlg::OnInitDialog()
 
 	// TODO: 在此加入額外的初始設定
 	SetTimer(1, 1000, NULL);//開啟Timer
+	
 	return TRUE;  // 傳回 TRUE，除非您對控制項設定焦點
 }
 
@@ -96,11 +97,32 @@ HCURSOR CSMS_TCP_ClientDlg::OnQueryDragIcon()
 void CSMS_TCP_ClientDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 在此加入您的訊息處理常式程式碼和 (或) 呼叫預設值
+	CString SendData;
+
 	KillTimer(1);
+
 	CTime timeNow = CTime::GetCurrentTime();
 	UpdateData(true);
-	m_StrNowTime = timeNow.Format("%Y/%m/%d %H:%M:%S");
+
+	CSocket m_socket01;//Socket Step02
+	m_socket01.Create();//Socket Step03
+	bool check = m_socket01.Connect("192.168.0.102", 10006);
+	if (check == true)
+	{
+
+		SendData.Format("%s%s", "0932639162:0:", timeNow.Format("%Y/%m/%d %H:%M:%S"));
+		m_socket01.Send(SendData.GetBuffer(0), SendData.GetLength());//Socket Step04
+		
+		char szRecv[20];
+		m_socket01.Receive(szRecv, 20);//Socket Step04
+
+		m_StrNowTime = timeNow.Format("%Y/%m/%d %H:%M:%S")+ "\n" +SendData+"\n"+ szRecv;
+		
+		m_socket01.Close();//Socket Step05
+	}
+
 	UpdateData(false);
-	SetTimer(1, 1000, NULL);//開啟Timer
+
+	SetTimer(1, 30000, NULL);//開啟Timer
 	CDialogEx::OnTimer(nIDEvent);
 }

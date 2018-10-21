@@ -51,6 +51,11 @@ BOOL CSMS_TCP_ClientApp::InitInstance()
 
 	CWinApp::InitInstance();
 
+	if (!AfxSocketInit())
+	{
+		AfxMessageBox("Failed to Initialize Sockets");//Socket Step01
+		return FALSE;
+	}
 
 	AfxEnableControlContainer();
 
