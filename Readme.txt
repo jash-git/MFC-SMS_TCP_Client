@@ -2,7 +2,7 @@
 
 功能
 	01.MFC+TIMER顯示目前時間
-	02.CSOCKT每30秒發送一次連線->傳送一次簡訊
+	02.CSOCKT每30秒發送一次連線 -> 傳送一次簡訊
 		#include <afxsock.h>		// MFC socket extensions //Socket Step00
 		
 		if (!AfxSocketInit())
@@ -20,4 +20,5 @@
 		char szRecv[20];
 		m_socket01.Receive(szRecv, 20);//Socket Step04
 		
-		m_socket01.Close();//Socket Step05
+		m_socket01.Close();//Socket Step05		
+	03.每三秒偵測一次檔案，如果有新檔案就把檔案內容傳送給設備發送簡訊
