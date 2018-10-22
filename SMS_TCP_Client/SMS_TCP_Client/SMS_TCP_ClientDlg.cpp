@@ -112,11 +112,11 @@ void CSMS_TCP_ClientDlg::OnTimer(UINT_PTR nIDEvent)
 	CString StrCallExeName;
 	CString StrListName;
 	StrCallExeName = gstrCurDrt;
-	StrCallExeName += "SMS_DATA\\get_list.bat ";
+	StrCallExeName += "smstxt1\\get_list.bat ";
 	StrCallExePath = gstrCurDrt;
-	StrCallExePath += "SMS_DATA\\";
+	StrCallExePath += "smstxt1\\";
 	StrListName = gstrCurDrt;
-	StrListName += "SMS_DATA\\list.txt";
+	StrListName += "smstxt1\\list.txt";
 
 	fopen_s(&pf,StrCallExeName.GetBuffer(0), "w");
 	fprintf(pf, "dir /b /on >list.txt");
@@ -175,7 +175,7 @@ void CSMS_TCP_ClientDlg::OnTimer(UINT_PTR nIDEvent)
 			for (int i = 0; i < ArrayData.GetCount(); i++)
 			{
 				CString StrFileName = gstrCurDrt;
-				StrFileName += "SMS_DATA\\";
+				StrFileName += "smstxt1\\";
 				StrFileName += ArrayData.GetAt(i);
 				pf = NULL;
 				fopen_s(&pf, StrFileName.GetBuffer(0), "r");

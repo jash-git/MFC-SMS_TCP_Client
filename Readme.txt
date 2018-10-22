@@ -22,3 +22,4 @@
 		
 		m_socket01.Close();//Socket Step05		
 	03.每三秒偵測一次檔案，如果有新檔案就把檔案內容傳送給設備發送簡訊
+	04.修改目錄名稱 SMS_DATA -> smstxt1
