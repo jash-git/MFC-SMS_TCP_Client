@@ -33,4 +33,5 @@ protected:
 public:
 	CString m_StrNowTime;
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnClickedButton1();
 };

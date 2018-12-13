@@ -1,0 +1,6 @@
+﻿  SMS_TCP_ClientDlg.cpp
+c:\users\rd\desktop\mfc-sms_tcp_client\sms_tcp_client\sms_tcp_client\sms_tcp_clientdlg.cpp(63): warning C4101: 'buf0': 未參考的區域變數
+c:\users\rd\desktop\mfc-sms_tcp_client\sms_tcp_client\sms_tcp_client\sms_tcp_clientdlg.cpp(209): warning C4800: 'BOOL': 強制將 bool 的值定為 'true' 或 'false' (效能警告)
+c:\users\rd\desktop\mfc-sms_tcp_client\sms_tcp_client\sms_tcp_client\sms_tcp_clientdlg.cpp(226): warning C4800: 'BOOL': 強制將 bool 的值定為 'true' 或 'false' (效能警告)
+  SMS_TCP_Client.vcxproj -> C:\Users\RD\Desktop\MFC-SMS_TCP_Client\SMS_TCP_Client\Debug\SMS_TCP_Client.exe
+  SMS_TCP_Client.vcxproj -> C:\Users\RD\Desktop\MFC-SMS_TCP_Client\SMS_TCP_Client\Debug\SMS_TCP_Client.pdb (Partial PDB)

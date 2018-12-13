@@ -6,6 +6,7 @@
 #include "SMS_TCP_Client.h"
 #include "SMS_TCP_ClientDlg.h"
 #include "afxdialogex.h"
+#include <stdio.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -14,7 +15,9 @@
 
 // CSMS_TCP_ClientDlg 癸杠よ遏
 
-
+CString gStrIP;
+int gintPort;
+int gintTimerCount;
 
 CSMS_TCP_ClientDlg::CSMS_TCP_ClientDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_SMS_TCP_CLIENT_DIALOG, pParent)
@@ -33,6 +36,7 @@ BEGIN_MESSAGE_MAP(CSMS_TCP_ClientDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_TIMER()
+	ON_BN_CLICKED(IDC_BUTTON1, &CSMS_TCP_ClientDlg::OnClickedButton1)
 END_MESSAGE_MAP()
 
 
@@ -50,6 +54,36 @@ BOOL CSMS_TCP_ClientDlg::OnInitDialog()
 	ShowWindow(SW_MINIMIZE);
 
 	// TODO: 肂﹍砞﹚
+	//---
+	//SERVER 資訊讀取檔案
+	gStrIP="192.168.0.102";
+	gintPort= 10006;
+	gintTimerCount = 0;
+	char buf[50];
+	char buf0[100];
+	CString StrBuf;
+	int i = 0;
+	FILE *pf=NULL;
+	fopen_s(&pf,"ServerInfo.txt", "r");
+	while (fgets(buf, 512, pf) != NULL)
+	{
+		switch (i)
+		{
+		case 0:
+			//sscanf_s(buf,"IP:%s", buf0);
+			StrBuf = buf;
+			gStrIP = StrBuf.Mid(0, (StrBuf.GetLength()-1));
+			break;
+		case 1:
+			//sscanf_s(buf,"Port:%s", buf0);
+			StrBuf = buf;
+			gintPort=_ttoi(StrBuf);
+			break;
+		}
+		i++;
+	}
+	fclose(pf);
+	//---SERVER 資訊讀取檔案
 	SetTimer(1, 1000, NULL);//秨币Timer
 	
 	return TRUE;  // 肚 TRUE埃獶眤癸北兜砞﹚礘翴
@@ -97,6 +131,8 @@ HCURSOR CSMS_TCP_ClientDlg::OnQueryDragIcon()
 void CSMS_TCP_ClientDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	// TODO: 眤癟矪瞶盽Α祘Α絏㎝ (┪) ㊣箇砞
+	CString StrPort; 
+	StrPort.Format("%d",gintPort);
 	CString SendData;
 	FILE *pf = NULL;
 	TCHAR gstrCurDrt[500];//ヘㄤヘ魁﹃
@@ -160,16 +196,34 @@ void CSMS_TCP_ClientDlg::OnTimer(UINT_PTR nIDEvent)
 	fclose(pf);
 	
 	CTime timeNow = CTime::GetCurrentTime();
+	gintTimerCount++;
 	UpdateData(true);
 	if (ArrayData.GetCount() == 0)
 	{
-		m_StrNowTime = timeNow.Format("%Y/%m/%d %H:%M:%S") + "\nWaiting...";
+		m_StrNowTime = "IP:"+ gStrIP+"\tPort:" + StrPort +"\n" + timeNow.Format("%Y/%m/%d %H:%M:%S") + "\nWaiting...";
+		if (gintTimerCount >= 10)//30秒防呆指令
+		{
+			gintTimerCount = 0;
+			CSocket m_socket00;//Socket Step02
+			m_socket00.Create();//Socket Step03
+			bool check = m_socket00.Connect(gStrIP, gintPort);
+			if (check == true)
+			{
+				SendData = "$$$AT + GET2 ?";
+				m_socket00.Send(SendData.GetBuffer(0), SendData.GetLength());//Socket Step04
+				char szRecv[20];
+				m_socket00.Receive(szRecv, 20);//Socket Step04
+				m_StrNowTime = "IP:" + gStrIP + "\tPort:" + StrPort + "\n" + timeNow.Format("%Y/%m/%d %H:%M:%S") + "\n" + SendData + "\n" + szRecv;
+			}
+			m_socket00.Close();//Socket Step05
+		}
 	}
 	else
 	{
+		gintTimerCount = 0;
 		CSocket m_socket01;//Socket Step02
 		m_socket01.Create();//Socket Step03
-		bool check = m_socket01.Connect("192.168.0.102", 10006);
+		bool check = m_socket01.Connect(gStrIP, gintPort);
 		if (check == true)
 		{
 			for (int i = 0; i < ArrayData.GetCount(); i++)
@@ -186,7 +240,7 @@ void CSMS_TCP_ClientDlg::OnTimer(UINT_PTR nIDEvent)
 
 					char szRecv[20];
 					m_socket01.Receive(szRecv, 20);//Socket Step04
-					m_StrNowTime = timeNow.Format("%Y/%m/%d %H:%M:%S") + "\n" + SendData + "\n" + szRecv;
+					m_StrNowTime = "IP:" + gStrIP + "\tPort:" + StrPort + "\n" + timeNow.Format("%Y/%m/%d %H:%M:%S") + "\n" + SendData + "\n" + szRecv;
 					break;
 				}
 				fclose(pf);
@@ -200,4 +254,11 @@ void CSMS_TCP_ClientDlg::OnTimer(UINT_PTR nIDEvent)
 
 	SetTimer(1, 3000, NULL);//秨币Timer
 	CDialogEx::OnTimer(nIDEvent);
+}
+
+
+void CSMS_TCP_ClientDlg::OnClickedButton1()
+{
+	// TODO: 在此加入控制項告知處理常式程式碼
+	OnOK();//離開按鈕實現
 }
