@@ -55,7 +55,7 @@ BOOL CSMS_TCP_ClientDlg::OnInitDialog()
 
 	// TODO: 肂﹍砞﹚
 	//---
-	//SERVER 資訊讀取檔案
+	//SERVER 資?讀取檔案
 	gStrIP="192.168.0.102";
 	gintPort= 10006;
 	gintTimerCount = 0;
@@ -83,7 +83,7 @@ BOOL CSMS_TCP_ClientDlg::OnInitDialog()
 		i++;
 	}
 	fclose(pf);
-	//---SERVER 資訊讀取檔案
+	//---SERVER 資?讀取檔案
 	SetTimer(1, 1000, NULL);//秨币Timer
 	
 	return TRUE;  // 肚 TRUE埃獶眤癸北兜砞﹚礘翴
@@ -201,7 +201,7 @@ void CSMS_TCP_ClientDlg::OnTimer(UINT_PTR nIDEvent)
 	if (ArrayData.GetCount() == 0)
 	{
 		m_StrNowTime = "IP:"+ gStrIP+"\tPort:" + StrPort +"\n" + timeNow.Format("%Y/%m/%d %H:%M:%S") + "\nWaiting...";
-		if (gintTimerCount >= 10)//30秒防呆指令
+		if (gintTimerCount >= 12)//30秒防呆指令
 		{
 			gintTimerCount = 0;
 			CSocket m_socket00;//Socket Step02
@@ -209,7 +209,7 @@ void CSMS_TCP_ClientDlg::OnTimer(UINT_PTR nIDEvent)
 			bool check = m_socket00.Connect(gStrIP, gintPort);
 			if (check == true)
 			{
-				SendData = "$$$AT + GET2 ?";
+				SendData = "$$$AT+GET2?";
 				m_socket00.Send(SendData.GetBuffer(0), SendData.GetLength());//Socket Step04
 				char szRecv[20];
 				m_socket00.Receive(szRecv, 20);//Socket Step04
@@ -259,6 +259,6 @@ void CSMS_TCP_ClientDlg::OnTimer(UINT_PTR nIDEvent)
 
 void CSMS_TCP_ClientDlg::OnClickedButton1()
 {
-	// TODO: 在此加入控制項告知處理常式程式碼
-	OnOK();//離開按鈕實現
+	// TODO: 在此加入控制?告知?理常式程式碼
+	OnOK();//離開按鈕?現
 }
